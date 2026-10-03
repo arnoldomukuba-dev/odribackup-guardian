@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: odri_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: odribackup
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d odribackup"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: odri_backend
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_SERVER: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: odribackup
+      POSTGRES_PORT: 5432
+      JWT_SECRET: production_super_secret_jwt_key_odri_guardian_2026
+      ENVIRONMENT: production
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: odri_frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  postgres_data:

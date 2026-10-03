@@ -1,0 +1,51 @@
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Private keys and certificates
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+venv/
+.venv/
+env/
+
+# Node.js
+node_modules/
+dist/
+build/
+.npm/
+.vite/
+
+# Logs
+*.log
+logs/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
